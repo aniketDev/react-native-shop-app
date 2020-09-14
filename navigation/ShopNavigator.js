@@ -4,6 +4,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import Colors from '../constants/Colors';
 import { productsOverviewOptions } from '../screens/shop/ProductsOverviewScreen';
+import { ProductDetailsOptions } from '../screens/shop/ProductDetailsScreen';
+import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -21,7 +23,11 @@ export const ProductsNavigator = () => (
       component={ProductsOverviewScreen}
       options={productsOverviewOptions}
     />
-    {/* <ProductsStackNavigator.Screen name="ProductDetail" component={ProductDetailsScreen} /> */}
+    <ProductsStackNavigator.Screen
+      name="ProductDetail"
+      component={ProductDetailsScreen}
+      options={ProductDetailsOptions}
+    />
     {/* <ProductsStackNavigator.Screen name="Cart" component={CartScreen} /> */}
   </ProductsStackNavigator.Navigator>
 );
