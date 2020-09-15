@@ -5,8 +5,9 @@ import { Provider } from 'react-redux';
 import reducers from './store/reducers';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-const store = createStore(reducers);
+const store = createStore(reducers, composeWithDevTools());
 
 const fetchFonts = () => {
   return Font.loadAsync({
