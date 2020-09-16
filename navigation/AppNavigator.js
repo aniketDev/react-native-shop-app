@@ -1,12 +1,12 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
-import { ProductsNavigator } from './ShopNavigator';
+import { ProductsNavigator, ShopNavigator } from './ShopNavigator';
 
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-      <ProductsNavigator />
+      <ShopNavigator />
       <StatusBar style="auto" />
     </NavigationContainer>
   );
