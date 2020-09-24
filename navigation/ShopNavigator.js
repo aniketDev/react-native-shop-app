@@ -12,6 +12,9 @@ import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
 import CartScreen, { CartScreenOptions } from '../screens/shop/CartScreen';
 import OrderScreen, { OrderScreenOptions } from '../screens/shop/OrderScreen';
 import { Ionicons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
+import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -38,22 +41,28 @@ export const ProductsNavigator = () => (
   </StackNavigator.Navigator>
 );
 
-const OrderNavigator = () => {
+const OrderNavigator = () => (
   <StackNavigator.Navigator screenOptions={defaultNavOptions}>
     <StackNavigator.Screen
       name="Orders"
       component={OrderScreen}
       options={OrderScreenOptions}
     />
-  </StackNavigator.Navigator>;
-};
+  </StackNavigator.Navigator>
+);
 
 const ShopDrawerNavigator = createDrawerNavigator();
 
 export const ShopNavigator = () => {
   return (
     <ShopDrawerNavigator.Navigator
-      drawerContent={() => {}}
+      drawerContent={(props) => (
+        <View style={{ paddingTop: 10 }}>
+          <SafeAreaView>
+            <DrawerItemList {...props} />
+          </SafeAreaView>
+        </View>
+      )}
       drawerContentOptions={{
         activeTintColor: Colors.primary
       }}
@@ -61,6 +70,11 @@ export const ShopNavigator = () => {
       <ShopDrawerNavigator.Screen
         name="Products"
         component={ProductsNavigator}
+        options={{
+          drawerIcon: (props) => (
+            <Ionicons name="md-cart" size={23} color={props.color} />
+          )
+        }}
       />
       <ShopDrawerNavigator.Screen
         name="Orders"

@@ -36,6 +36,7 @@ const CartScreen = (props) => {
           renderItem={(item) => (
             <CartItem
               item={item.item[1]}
+              deletable
               onRemove={() => {
                 dispatch(removeFromCart(item.item[0]));
               }}
