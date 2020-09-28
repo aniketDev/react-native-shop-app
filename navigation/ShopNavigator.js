@@ -15,7 +15,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import EditProductsScreen from '../screens/user/EditProductScreen';
+import EditProductsScreen, {
+  EditProductsScreenOptions
+} from '../screens/user/EditProductScreen';
 
 import UserProductsScreen, {
   UserProductsScreenOptions
@@ -66,7 +68,7 @@ const AdminNavigator = () => (
     <StackNavigator.Screen
       name="EditProduct"
       component={EditProductsScreen}
-      options={UserProductsScreenOptions}
+      options={EditProductsScreenOptions}
     />
   </StackNavigator.Navigator>
 );
