@@ -1,13 +1,73 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Button } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector, useDispatch } from 'react-redux';
+import ProductItem from '../../components/shop/ProductItem';
+import CustomHeaderButton from '../../components/UI/HeaderButton';
+import Colors from '../../constants/Colors';
+import { deleteProduct } from '../../store/actions/products';
+import products from '../../store/reducers/products';
 
 const UserProductsScreen = (props) => {
+  const userProducts = useSelector((state) => state.products.userProducts);
+  const dispatch = useDispatch();
+  const editProductHandler = (id) => {
+    props.navigation.navigate('EditProduct', { productId: id });
+  };
+
   return (
-    <View style={styles.screen}>
-      <Text>Replace me!</Text>
-    </View>
+    <FlatList
+      data={userProducts}
+      renderItem={(itemData) => (
+        <ProductItem
+          image={itemData.item.imageUrl}
+          title={itemData.item.title}
+          price={itemData.item.price}
+          onSelect={() => {
+            editProductHandler(itemData.item.id);
+          }}
+        >
+          <Button
+            color={Colors.primary}
+            title="Edit"
+            onPress={() => {
+              editProductHandler(itemData.item.id);
+            }}
+          />
+          <Button
+            color={Colors.primary}
+            title="Delete"
+            onPress={() => {
+              dispatch(deleteProduct(itemData.item.id));
+            }}
+          />
+        </ProductItem>
+      )}
+    />
   );
 };
+
+export const UserProductsScreenOptions = (navData) => ({
+  headerTitle: 'Your Products',
+  headerLeft: () => (
+    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+      <Item
+        title="Cart"
+        iconName="md-menu"
+        onPress={() => navData.navigation.toggleDrawer()}
+      />
+    </HeaderButtons>
+  ),
+  headerRight: () => (
+    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+      <Item
+        title="Add"
+        iconName="md-create"
+        onPress={() => navData.navigation.navigate('EditProduct')}
+      />
+    </HeaderButtons>
+  )
+});
 
 const styles = StyleSheet.create({
   screen: {

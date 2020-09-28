@@ -15,6 +15,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import EditProductsScreen from '../screens/user/EditProductScreen';
+
+import UserProductsScreen, {
+  UserProductsScreenOptions
+} from '../screens/user/UserProductsScreen';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -47,6 +52,21 @@ const OrderNavigator = () => (
       name="Orders"
       component={OrderScreen}
       options={OrderScreenOptions}
+    />
+  </StackNavigator.Navigator>
+);
+
+const AdminNavigator = () => (
+  <StackNavigator.Navigator screenOptions={defaultNavOptions}>
+    <StackNavigator.Screen
+      name="UserProdcuts"
+      component={UserProductsScreen}
+      options={UserProductsScreenOptions}
+    />
+    <StackNavigator.Screen
+      name="EditProduct"
+      component={EditProductsScreen}
+      options={UserProductsScreenOptions}
     />
   </StackNavigator.Navigator>
 );
@@ -85,7 +105,15 @@ export const ShopNavigator = () => {
           )
         }}
       />
-      {/* <ShopDrawerNavigator.screen name="Admin" component={} /> */}
+      <ShopDrawerNavigator.Screen
+        name="Admin"
+        component={AdminNavigator}
+        options={{
+          drawerIcon: (props) => (
+            <Ionicons name="md-list" size={23} color={props.color} />
+          )
+        }}
+      />
     </ShopDrawerNavigator.Navigator>
   );
 };
