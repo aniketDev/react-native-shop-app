@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector } from 'react-redux';
@@ -6,9 +6,7 @@ import CustomHeaderButton from '../../components/UI/HeaderButton';
 import products from '../../store/reducers/products';
 
 const EditProductsScreen = (props) => {
-  const productId = props.route.params
-    ? props.route.params.productId
-    : undefined;
+  const productId = props.route.params ? props.route.params.productId : null;
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === productId)
   );
@@ -17,9 +15,31 @@ const EditProductsScreen = (props) => {
   const [imageUrl, setImageUrl] = useState(
     editedProduct ? editedProduct.imageUrl : ''
   );
-  const [price, setPrice] = useState(editedProduct ? editedProduct.price : '');
+  const [price, setPrice] = useState(
+    editedProduct ? editedProduct.price.toString() : ''
+  );
   const [description, setDescription] = useState(
     editedProduct ? editedProduct.description : ''
+  );
+
+  const submitHandler = useCallback(() => {
+    console.log('submit');
+  }, []);
+
+  useEffect(
+    () =>
+      props.navigation.setOptions({
+        headerRight: () => (
+          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            <Item
+              title="Save"
+              iconName="md-checkmark"
+              onPress={submitHandler}
+            />
+          </HeaderButtons>
+        )
+      }),
+    [submitHandler]
   );
 
   return (
@@ -62,18 +82,15 @@ const EditProductsScreen = (props) => {
   );
 };
 
-export const EditProductsScreenOptions = (navData) => ({
-  headerTitle: navData.route.params ? 'Edit Product' : 'Add Product',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-      <Item
-        title="Save"
-        iconName="md-checkmark"
-        onPress={() => navData.navigation.navigate('ProductsOverview')}
-      />
-    </HeaderButtons>
-  )
-});
+export const EditProductsScreenOptions = (navData) => {
+  console.log(navData.route.params);
+  // const submit = navData.route.params ? navData.route.params.submit : null;
+  const routeParams = navData.route.params ? navData.route.params : {};
+
+  return {
+    headerTitle: routeParams.productId ? 'Edit Product' : 'Add Product'
+  };
+};
 
 const styles = StyleSheet.create({
   form: {
