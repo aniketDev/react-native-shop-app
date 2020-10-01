@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  Alert
+} from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
@@ -14,6 +21,7 @@ const EditProductsScreen = (props) => {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
+  const [titleValid, setTitleValid] = useState(false);
   const [imageUrl, setImageUrl] = useState(
     editedProduct ? editedProduct.imageUrl : ''
   );
@@ -25,13 +33,17 @@ const EditProductsScreen = (props) => {
   );
 
   const submitHandler = useCallback(() => {
+    if (!titleValid) {
+      Alert.alert('Wrong input', 'check errors');
+      return;
+    }
     if (editedProduct) {
       dispatch(updateProduct(productId, title, description, imageUrl));
     } else {
       dispatch(createProduct(title, description, imageUrl, +price));
     }
     props.navigation.goBack();
-  }, [dispatch, title, description, imageUrl, price, productId]);
+  }, [dispatch, title, description, imageUrl, price, productId, titleValid]);
 
   useEffect(
     () =>
@@ -49,6 +61,15 @@ const EditProductsScreen = (props) => {
     [submitHandler]
   );
 
+  const titleChangeHandler = (text) => {
+    if (text.trim().length > 0) {
+      setTitleValid(true);
+    } else {
+      setTitleValid(false);
+    }
+    setTitle(text);
+  };
+
   return (
     <ScrollView>
       <View style={styles.form}>
@@ -57,8 +78,10 @@ const EditProductsScreen = (props) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChangeText={(text) => setTitle(text)}
+            onChangeText={titleChangeHandler}
+            keyboardType="default"
           />
+          {!titleValid && <Text>Please enter a valid title!</Text>}
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
@@ -74,6 +97,7 @@ const EditProductsScreen = (props) => {
             style={styles.input}
             value={price}
             onChangeText={(text) => setPrice(text)}
+            keyboardType="decimal-pad"
           />
         </View>
         <View style={styles.formControl}>
