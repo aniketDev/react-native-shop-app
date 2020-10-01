@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CustomHeaderButton from '../../components/UI/HeaderButton';
+import { createProduct, updateProduct } from '../../store/actions/products';
 import products from '../../store/reducers/products';
 
 const EditProductsScreen = (props) => {
@@ -10,6 +11,7 @@ const EditProductsScreen = (props) => {
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === productId)
   );
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
   const [imageUrl, setImageUrl] = useState(
@@ -23,8 +25,12 @@ const EditProductsScreen = (props) => {
   );
 
   const submitHandler = useCallback(() => {
-    console.log('submit');
-  }, []);
+    if (editedProduct) {
+      dispatch(updateProduct(productId, title, description, imageUrl));
+    } else {
+      dispatch(createProduct(title, description, imageUrl, +price));
+    }
+  }, [dispatch, title, description, imageUrl, price, productId]);
 
   useEffect(
     () =>
@@ -50,7 +56,7 @@ const EditProductsScreen = (props) => {
           <TextInput
             style={styles.input}
             value={title}
-            onChange={(text) => setTitle(text)}
+            onChangeText={(text) => setTitle(text)}
           />
         </View>
         <View style={styles.formControl}>
@@ -58,7 +64,7 @@ const EditProductsScreen = (props) => {
           <TextInput
             style={styles.input}
             value={imageUrl}
-            onChange={(text) => setImageUrl(text)}
+            onChangeText={(text) => setImageUrl(text)}
           />
         </View>
         <View style={styles.formControl}>
@@ -66,7 +72,7 @@ const EditProductsScreen = (props) => {
           <TextInput
             style={styles.input}
             value={price}
-            onChange={(text) => setPrice(text)}
+            onChangeText={(text) => setPrice(text)}
           />
         </View>
         <View style={styles.formControl}>
@@ -74,7 +80,7 @@ const EditProductsScreen = (props) => {
           <TextInput
             style={styles.input}
             value={description}
-            onChange={(text) => setDescription(text)}
+            onChangeText={(text) => setDescription(text)}
           />
         </View>
       </View>
@@ -83,8 +89,6 @@ const EditProductsScreen = (props) => {
 };
 
 export const EditProductsScreenOptions = (navData) => {
-  console.log(navData.route.params);
-  // const submit = navData.route.params ? navData.route.params.submit : null;
   const routeParams = navData.route.params ? navData.route.params : {};
 
   return {
