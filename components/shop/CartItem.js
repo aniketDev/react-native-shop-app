@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableNativeFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const CartItem = ({ item, onRemove, deletable }) => {
-  console.log('item::', item);
   return (
     <View style={styles.cardItem}>
       <View style={styles.itemData}>

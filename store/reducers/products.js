@@ -22,7 +22,6 @@ export default (state = initialState, action) => {
         action.payload.description,
         action.payload.price
       );
-      console.log(newProduct);
       return {
         ...state,
         availableProducts: state.availableProducts.concat(newProduct),

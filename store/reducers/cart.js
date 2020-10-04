@@ -38,7 +38,6 @@ export default (state = initialState, action) => {
       }
     }
     case REMOVE_FROM_CART: {
-      console.log(action.payload);
       const selectedCartItem = state.items[action.payload];
       const qty = selectedCartItem.quantity;
       let updatedCartItems;
